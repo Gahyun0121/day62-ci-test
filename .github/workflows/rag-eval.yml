@@ -3,13 +3,13 @@ name: rag-eval
 on:
   pull_request:
     paths:
-      - "app.py"
-      - "run_eval.py"
-      - "data/**"
-      - "tests/**"
-      - "baselines/**"
-      - "pyproject.toml"
-      - "uv.lock"
+      - "rag_eval_ci/app.py"
+      - "rag_eval_ci/run_eval.py"
+      - "rag_eval_ci/data/**"
+      - "rag_eval_ci/tests/**"
+      - "rag_eval_ci/baselines/**"
+      - "rag_eval_ci/pyproject.toml"
+      - "rag_eval_ci/uv.lock"
       - ".github/workflows/rag-eval.yml"
   schedule:
     - cron: "0 17 * * *"   # 매일 UTC 17시(한국 시간 새벽 2시)에 전체 사례 평가
@@ -27,6 +27,9 @@ jobs:
   evaluate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: rag_eval_ci
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
@@ -57,5 +60,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: rag-eval-reports
-          path: reports/
+          path: rag_eval_ci/reports/
           retention-days: 14
